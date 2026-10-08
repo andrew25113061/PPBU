@@ -1,4 +1,4 @@
-from tkinter import *
+from tkinter import ****
 
 def read():
     name = e.get()
