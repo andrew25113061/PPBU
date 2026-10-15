@@ -45,7 +45,7 @@ def quit():
 window = Tk()
 window.title("Графический редактор")
 
-pen_color = "red"
+pen_color = "black"
 canvas = Canvas(window, width=600, height=400)
 canvas.pack()
 canvas.bind("<B1-Motion>", draw)
