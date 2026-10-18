@@ -11,7 +11,3 @@ print('Текст зашифрован!')
 with open('code.txt', 'w', encoding='utf-8') as f:
     f.write(secret)
 print('Файл "code.txt" для отправки сформирован.')
-
-with open('decode.txt', 'w', encoding='utf-8') as f:
-    f.write(unsecret)
-print('Файл "decode.txt" для чтения сформирован')
