@@ -15,9 +15,9 @@ def update_currency_labels(event=None):
     base2_label.config(text=f"{currencies.get(code2, code2)}")
     target_label.config(text=f"{currencies.get(target, target)}")
 
+# Запрашиваем курсы двух базовых валют к целевой и показываем оба сразу
 
 def exchange():
-    """Запрашивает курсы двух базовых валют к целевой и показывает оба сразу."""
     target = target_combobox.get()
     base1 = base1_combobox.get()
     base2 = base2_combobox.get()
@@ -42,7 +42,8 @@ def exchange():
                 mb.showerror("Ошибка", f"Валюта {code} не найдена")
                 return
 
-        # Кросс-курс: 1 базовая = (rate_target / rate_base) целевой
+ # Кросс-курс: 1 базовая = (rate_target / rate_base) целевой
+
         cross1 = rates[target] / rates[base1]
         cross2 = rates[target] / rates[base2]
 
@@ -120,12 +121,7 @@ target_combobox.bind("<<ComboboxSelected>>", update_currency_labels)
 target_label = ttk.Label(root, text="")
 target_label.pack()
 
-Button(
-    root,
-    text="Получить курс обмена",
-    command=exchange,
-).pack(pady=40)
-
+Button(root, text="Получить курс обмена", command=exchange).pack(pady=40)
 
 update_currency_labels()
 
