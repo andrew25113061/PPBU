@@ -4,6 +4,18 @@ from tkinter import ttk
 import requests
 
 
+# Обновление подписей под комбобоксами — названия выбранных валют.
+
+def update_currency_labels(event=None):
+    code1 = base1_combobox.get()
+    code2 = base2_combobox.get()
+    target = target_combobox.get()
+
+    base1_label.config(text=f"{currencies.get(code1, code1)}")
+    base2_label.config(text=f"{currencies.get(code2, code2)}")
+    target_label.config(text=f"{currencies.get(target, target)}")
+
+
 currencies = {
     "USD": "Доллар США",
     "EUR": "Евро",
@@ -61,7 +73,7 @@ target_combobox.pack(pady=15)
 target_label = ttk.Label(root, text="")
 target_label.pack()
 
-
+update_currency_labels()
 
 
 root.mainloop()
