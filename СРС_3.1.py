@@ -30,8 +30,7 @@ def exchange():
 
     try:
         response = requests.get(
-            "https://open.er-api.com/v6/latest/USD", timeout=10
-        )
+            "https://open.er-api.com/v6/latest/USD", timeout=10)
         response.raise_for_status()
         data = response.json()
         rates = data["rates"]
