@@ -5,11 +5,62 @@ import requests
 import datetime
 
 
-# Обновляем название выбранной криптовалюты под Combobox.
+# Обновляем название выбранной криптовалюты под Combobox
 def update_currency_label(event=None):
     code = combobox.get()
     name = currencies.get(code, code)
     currency_label.config(text=name)
+    # Сбрасываем старый курс при смене монеты
+    price_label.config(text="—")
+    updated_label.config(text="")
+
+# Запрашиваем цену у CoinGecko. Возвращает число или None
+def fetch_price(code):
+    url = 'https://api.coingecko.com/api/v3/simple/price'
+    params = {'ids': code, 'vs_currencies': 'usd'}
+    response = requests.get(url, params=params, timeout=10)
+    response.raise_for_status()
+    data = response.json()
+
+    if code in data and 'usd' in data[code]:
+        return data[code]['usd']
+    return None
+
+# Получает курс и отображает его в окне.
+def exchange():
+    code = combobox.get()
+    if not code:
+        mb.showwarning('Ошибка!', 'Выберите криптовалюту')
+        return
+
+# Блокируем кнопку на время запроса
+    fetch_button.config(state='disabled', text='Загрузка...')
+# Принудительно перерисовываем окно
+    root.update()
+
+    try:
+        price = fetch_price(code)
+
+        if price is None:
+            mb.showerror('Ошибка', f'Не удалось получить цену для {code}')
+            price_label.config(text='—')
+            updated_label.config(text='')
+            return
+
+# Отображаем в окне
+        price_label.config(text=f"${price:,.6f}")
+        now = datetime.datetime.now().strftime('%H:%M:%S')
+        updated_label.config(text=f"Обновлено в {now}")
+
+    except requests.exceptions.Timeout:
+        mb.showerror('Ошибка', 'Превышено время ожидания запроса')
+        price_label.config(text='—')
+    except Exception as er:
+        mb.showerror('Ошибка', str(er))
+        price_label.config(text='—')
+    finally:
+# Возвращаем кнопку в рабочее состояние
+        fetch_button.config(state='normal', text='Получить курс к USD')
 
 
 currencies = {
@@ -84,6 +135,7 @@ button_frame.pack(pady=10)
 fetch_button = Button(
     button_frame,
     text='Получить курс к USD',
+    command=exchange,
     font=('Arial', 10, 'bold'),
     bg='forest green',
     fg='white',
